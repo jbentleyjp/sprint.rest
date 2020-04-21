@@ -3,6 +3,7 @@ const pokeData = require("./data");
 
 const setupServer = () => {
   const app = express();
+  app.use(express.json());
 
   app.get("/api/pokemon", (request, response) => {
     const number = request.query.number;
@@ -23,25 +24,18 @@ const setupServer = () => {
   });
 
   app.get("/api/pokemon/:id", (request, response) => {
-    /*  const getPokemon = response.json(
-      pokeData.pokemon.filter(
-        (member) => parseInt(member.id) === request.params.id
-      )
-    );
-    console.log(JSON.parse(getPokemon)); */
-
-    // response.send(getPokemon);
-
-    const id = request.query.id;
+    const id = request.params.id;
     const chosenPokemon = pokeData.pokemon[id - 1];
-    console.log("SDFDFSFSDFDSFSAGDSAFDSFDSFDSFDSF");
 
     response.send(chosenPokemon);
   });
 
   app.get("/api/pokemon/:name", (request, response) => {
-    const name = request.query.name;
-    response.send(pokeData.pokemon.name === name);
+    console.log("ITS BEING CALLED");
+    const name = request.params.name;
+    const chosenPokemon = pokeData.pokemon.name === "Mew";
+    console.log(chosenPokemon, "ASDSADFSFDFDSFDSFDAFDS");
+    response.send(chosenPokemon);
   });
 
   // app.patch("/api/pokemon/:idOrName", (request, response) => {

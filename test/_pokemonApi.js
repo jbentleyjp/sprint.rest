@@ -99,173 +99,17 @@ describe("Pokemon API Server", () => {
     });
   });
 
-  describe.only("GET /api/pokemon/:id - getting a pokemon by it's id ", () => {
+  describe("GET /api/pokemon/:id - getting a pokemon by it's id ", () => {
     it("should get a pokemon by entering its id", async () => {
-      const expected = {
-        id: "151",
-        name: "Mew",
-        classification: "New Species Pokémon",
-        types: ["Psychic"],
-        resistant: ["Fighting", "Psychic"],
-        weaknesses: ["Bug", "Ghost", "Dark"],
-        weight: {
-          minimum: "3.5kg",
-          maximum: "4.5kg",
-        },
-        height: {
-          minimum: "0.35m",
-          maximum: "0.45m",
-        },
-        fleeRate: 0.1,
-        "Pokémon Class": "This is a MYTHIC Pokémon.",
-        MYTHIC: "Pokémon Class",
-        maxCP: 3087,
-        maxHP: 3299,
-        attacks: {
-          fast: [
-            {
-              name: "Pound",
-              type: "Normal",
-              damage: 7,
-            },
-          ],
-          special: [
-            {
-              name: "Dragon Pulse",
-              type: "Dragon",
-              damage: 65,
-            },
-            {
-              name: "Earthquake",
-              type: "Ground",
-              damage: 100,
-            },
-            {
-              name: "Fire Blast",
-              type: "Fire",
-              damage: 100,
-            },
-            {
-              name: "Hurricane",
-              type: "Flying",
-              damage: 80,
-            },
-            {
-              name: "Hyper Beam",
-              type: "Normal",
-              damage: 120,
-            },
-            {
-              name: "Moonblast",
-              type: "Fairy",
-              damage: 85,
-            },
-            {
-              name: "Psychic",
-              type: "Psychic",
-              damage: 55,
-            },
-            {
-              name: "Solar Beam",
-              type: "Grass",
-              damage: 120,
-            },
-            {
-              name: "Thunder",
-              type: "Electric",
-              damage: 100,
-            },
-          ],
-        },
-      };
-
-      let actual = await request.get("/api/pokemon/:id").query({ id: 151 });
-      // console.log({actual})
-      actual.should.be.eql(expected);
+      let actual = await request.get("/api/pokemon/151");
+      JSON.parse(actual.text).should.be.eql(pokeData.pokemon[150]);
     });
   });
 
   describe("GET /api/pokemon/:name - getting a pokemon by it's name ", () => {
     it("should get a pokemon by entering its name", async () => {
-      const expected = {
-        id: "151",
-        name: "Mew",
-        classification: "New Species Pokémon",
-        types: ["Psychic"],
-        resistant: ["Fighting", "Psychic"],
-        weaknesses: ["Bug", "Ghost", "Dark"],
-        weight: {
-          minimum: "3.5kg",
-          maximum: "4.5kg",
-        },
-        height: {
-          minimum: "0.35m",
-          maximum: "0.45m",
-        },
-        fleeRate: 0.1,
-        "Pokémon Class": "This is a MYTHIC Pokémon.",
-        MYTHIC: "Pokémon Class",
-        maxCP: 3087,
-        maxHP: 3299,
-        attacks: {
-          fast: [
-            {
-              name: "Pound",
-              type: "Normal",
-              damage: 7,
-            },
-          ],
-          special: [
-            {
-              name: "Dragon Pulse",
-              type: "Dragon",
-              damage: 65,
-            },
-            {
-              name: "Earthquake",
-              type: "Ground",
-              damage: 100,
-            },
-            {
-              name: "Fire Blast",
-              type: "Fire",
-              damage: 100,
-            },
-            {
-              name: "Hurricane",
-              type: "Flying",
-              damage: 80,
-            },
-            {
-              name: "Hyper Beam",
-              type: "Normal",
-              damage: 120,
-            },
-            {
-              name: "Moonblast",
-              type: "Fairy",
-              damage: 85,
-            },
-            {
-              name: "Psychic",
-              type: "Psychic",
-              damage: 55,
-            },
-            {
-              name: "Solar Beam",
-              type: "Grass",
-              damage: 120,
-            },
-            {
-              name: "Thunder",
-              type: "Electric",
-              damage: 100,
-            },
-          ],
-        },
-      };
-      const res = await request.get("/api/pokemon/").query({ name: "Mew" });
-      expected.should.be.eql(pokeData.pokemon[150]);
+      const res = await request.get("/api/pokemon/Mew");
+      res.text.should.be.eql(pokeData.pokemon[150]);
     });
   });
 
