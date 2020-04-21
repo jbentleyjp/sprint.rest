@@ -99,32 +99,34 @@ describe("Pokemon API Server", () => {
     });
   });
 
-  describe("GET /api/pokemon/:id - getting a pokemon by it's id ", () => {
+  describe("GET /api/pokemon/:key - getting a pokemon by it's id or name ", () => {
     it("should get a pokemon by entering its id", async () => {
-      let actual = await request.get("/api/pokemon/151");
-      JSON.parse(actual.text).should.be.eql(pokeData.pokemon[150]);
+      const res = await request.get("/api/pokemon/151");
+      res.should.be.json;
+      res.body.should.eql(pokeData.pokemon[150]);
     });
-  });
-
-  describe("GET /api/pokemon/:name - getting a pokemon by it's name ", () => {
     it("should get a pokemon by entering its name", async () => {
       const res = await request.get("/api/pokemon/Mew");
-      res.text.should.be.eql(pokeData.pokemon[150]);
+      res.should.be.json;
+      res.body.name.should.equal("Mew");
     });
   });
 
-  xdescribe("PATCH /api/pokemon/:idOrName - allow partial modifications of pokemon", () => {
-    it("should...", async () => {
-      const res = await request.patch("/api/pokemon");
-      request.get("/api/pokemon").query({ id: 4 });
-      request.get("/api/pokemon").query({ classification: "dragon" });
+  describe("PATCH /api/pokemon/:idOrName - allow partial modifications of pokemon", () => {
+    it("should allow editing of key value pairs", async () => {
+      const res = await request
+        .patch("/api/pokemon/6")
+        .send({ classification: "dragon" });
+      res.should.be.json;
+      res.body.classification.should.equal("dragon");
     });
   });
 
   describe("DELETE /api/pokemon/:idOrName", () => {
     it("should delete the given pokemon", async () => {
-      await request.delete("/api/pokemon").query({ id: 006 });
-      pokeData.pokemon.length.should.equal(150);
+      const res = await request.delete("/api/pokemon/25");
+      res.should.be.json;
+      res.body.length.should.equal(151);
     });
   });
   // describe(" ... ", () => {

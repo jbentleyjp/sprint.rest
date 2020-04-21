@@ -1,5 +1,6 @@
 const express = require("express");
 const pokeData = require("./data");
+const pInfo = pokeData.pokemon;
 
 const setupServer = () => {
   const app = express();
@@ -9,67 +10,58 @@ const setupServer = () => {
     const number = request.query.number;
 
     if (!number) {
-      response.send(pokeData.pokemon);
+      response.send(pInfo);
     } else {
       for (let i = 0; i < number; i++) {
-        response.send(pokeData.pokemon[i]);
+        response.send(pInfo[i]);
       }
     }
   });
 
   app.post("/api/pokemon", (request, response) => {
     const newPokemon = request.query;
-    pokeData.pokemon.push(newPokemon);
-    response.send(pokeData.pokemon);
+    pInfo.push(newPokemon);
+    response.send(pInfo);
   });
 
-  app.get("/api/pokemon/:id", (request, response) => {
-    const id = request.params.id;
-    const chosenPokemon = pokeData.pokemon[id - 1];
-
+  app.get("/api/pokemon/:key", (request, response) => {
+    let chosenPokemon;
+    const key = request.params.key;
+    pInfo.forEach((pokemon) => {
+      if (Number(pokemon.id) === Number(key)) {
+        chosenPokemon = pokemon;
+      } else if (pokemon.name === key) {
+        chosenPokemon = pokemon;
+      }
+    });
     response.send(chosenPokemon);
   });
 
-  app.get("/api/pokemon/:name", (request, response) => {
-    console.log("ITS BEING CALLED");
-    const name = request.params.name;
-    const chosenPokemon = pokeData.pokemon.name === "Mew";
-    console.log(chosenPokemon, "ASDSADFSFDFDSFDSFDAFDS");
-    response.send(chosenPokemon);
+  app.patch("/api/pokemon/:key", (request, response) => {
+    const key = request.params.key;
+    pInfo.forEach((pokemon) => {
+      if (Number(pokemon.id) === Number(key)) {
+        pokemon = Object.assign(pokemon, request.body);
+        response.send(pokemon);
+      } else {
+        pokemon = Object.assign(pokemon, request.body);
+        response.send(pokemon);
+      }
+    });
   });
 
-  // app.patch("/api/pokemon/:idOrName", (request, response) => {
-
-  //   console.log(request.body, "BOOOOOODY")
-  //   console.log(request.params, "aaaaaaaaa")
-  // if (request.query.name){
-  //   let selector = request.query.name;
-  //   response.send(pokeData.pokemon.)
-  // } else {
-  //   let selector = request.query.id
-  // };
-
-  //   response.send(pokeData.pokemon)
-
-  // })
-
-  app.delete("/api/pokemon/:idOrName", (request, response) => {
-    // console.log("BBBBBBBB")
-    if (typeof request.query.name === "string") {
-      const selector = request.query.name;
-      const itemIndex = pokeData.pokemon.indexOf(
-        selector === pokeData.pokemon.name
-      );
-      pokeData.pokemon.splice(itemIndex, 1);
-    } else {
-      const selector = request.query.id;
-      const itemIndex = pokeData.pokemon.indexOf(
-        selector === pokeData.pokemon.id
-      );
-      // console.log(itemIndex, "AAAAA")
-      pokeData.pokemon.splice(itemIndex, 1);
+  app.delete("/api/pokemon/:key", (request, response) => {
+    const key = request.params.key;
+    console.log("IM BEING REACHED");
+    for (let i = 0; i < pInfo.length; i++) {
+      if (Number(pInfo[i].id) === Number(key)) {
+        pInfo.splice(i, 1);
+        response.send(pInfo);
+      } else {
+        pInfo.splice(i, 1);
+        response.send(pInfo);
+      }
     }
-    response.send(pokeData.pokemon);
   });
 
   return app;
